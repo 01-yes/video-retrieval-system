@@ -11,7 +11,7 @@ print(f"当前目录: {current_dir}")
 print(f"添加路径: {src_dir}")
 
 try:
-    from feature_extractor import VideoFeatureExtractor  # 注意这里改了！
+    from feature_extractor import VideoFeatureExtractor 
     print("✅ 成功导入特征提取器")
 except ImportError as e:
     print(f"❌ 导入失败: {e}")
@@ -22,7 +22,7 @@ def main():
     print("=== 基于内容的视频检索系统 ===")
     
     # 初始化特征提取器
-    extractor = VideoFeatureExtractor()  # 注意这里改了！
+    extractor = VideoFeatureExtractor()  
     
     # 设置UCF101数据路径
     ucf101_path = r"E:\Users\Lenovo\Downloads\UCF101"
