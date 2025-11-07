@@ -1,42 +1,234 @@
-# Video Retrieval System
+# 🎬 双语义视频检索系统
 
-A semantic-based video retrieval system implementing content-based similarity search on UCF101 dataset.
+一个基于传统视觉特征和CLIP深度特征的双语义视频检索系统，支持智能权重调节和多维度相似度分析。
 
-## 📋 Project Overview
-- **Task**: Video similarity retrieval based on semantic representation
-- **Dataset**: UCF101 Action Recognition Dataset
-- **Features**: OpenCV global features (color histograms, HOG, statistical features)
-- **Similarity**: Cosine similarity metric
+## ✨ 核心特性
 
-## 🏗️ Project Structure
-```
-video-retrieval-system/
-├── src/
-│   ├── feature_extractor.py  # Video feature extraction
-│   └── retrieval.py          # Similarity search system
-├── main.py                   # Main processing pipeline
-├── demo.py                   # Demonstration script
-├── test_clip.py             # Environment testing
-└── .gitignore               # Git ignore rules
-```
+- 🎯 **双语义检索**: 结合传统视觉特征（颜色、纹理、统计）和CLIP深度语义特征
+- ⚖️ **智能权重调节**: 动态调整传统特征和CLIP特征的权重比例
+- 🚀 **高效检索**: 基于余弦相似度的快速视频相似性搜索
+- 📊 **多维度分析**: 显示综合相似度及各特征分量相似度
+- 🛠️ **灵活配置**: 支持多种权重配置比较和效果评估
 
-## 🚀 Quick Start
+## 🏗️ 项目结构
+
+project1/
+├──src/                          # 源代码目录
+│├── feature_extractor.py     # 主特征提取器（传统 + CLIP）
+│├── clip_extractor.py        # CLIP深度特征提取器
+│└── retrieval.py             # 双特征检索系统
+├──outputs/                     # 特征存储目录
+├──data/                        # 视频数据目录
+├──demo.py                      # 系统演示脚本
+├──main.py                      # 交互式主程序
+├──test_clip.py                 # CLIP功能测试
+├──install_clip_with_mirror.py  # CLIP安装工具
+└──README.md                    # 项目文档
+
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Python 3.7+
+- CUDA（可选，用于GPU加速）
+
+### 安装依赖
+
 ```bash
-# Extract features from videos
-python main.py
+pip install opencv-python numpy open-clip-torch torch torchvision pillow
+```
 
-# Run retrieval system
-python src/retrieval.py
+快速测试
 
-# Full demonstration
+1. 测试CLIP功能：
+
+```bash
+python test_clip.py
+```
+
+1. 运行系统演示：
+
+```bash
 python demo.py
 ```
 
-## 📊 Results
-- Achieved >0.98 similarity for same-action videos
-- Successfully processed UCF101 dataset
-- Implemented complete video retrieval pipeline
+1. 使用交互式系统：
 
-## 👨‍💻 Author
-- GOODLAB Laboratory Assessment
-- GitHub: [01-yes](https://github.com/01-yes)
+```bash
+python main.py
+```
+
+📖 详细使用方法
+
+特征提取
+
+```python
+from src.feature_extractor import VideoFeatureExtractor
+
+# 初始化特征提取器
+extractor = VideoFeatureExtractor(use_clip=True)
+
+# 提取单个视频特征
+features = extractor.extract_features("path/to/video.mp4")
+
+# 批量提取特征
+video_paths = ["video1.mp4", "video2.mp4", "video3.mp4"]
+features_dict = extractor.extract_features_batch(video_paths)
+
+# 保存特征
+import numpy as np
+np.save("outputs/video_features.npy", features_dict)
+```
+
+视频检索
+
+```python
+from src.retrieval import VideoRetrievalSystem
+
+# 初始化检索系统
+retrieval_system = VideoRetrievalSystem(
+    features_path="outputs/video_features.npy",
+    clip_weight=0.5  # CLIP特征权重
+)
+
+# 方法1：通过视频名称查询
+results = retrieval_system.query_by_example("query_video.mp4", top_k=5)
+
+# 方法2：调整权重
+retrieval_system.set_weights(traditional_weight=0.8, clip_weight=0.2)
+
+# 方法3：比较不同权重配置
+weight_configs = [
+    (0.8, 0.2, "侧重传统特征"),
+    (0.5, 0.5, "平衡权重"), 
+    (0.2, 0.8, "侧重CLIP语义")
+]
+retrieval_system.compare_weight_configs("query_video.mp4", weight_configs)
+```
+
+交互式使用
+
+运行 python main.py 后，系统提供以下菜单：
+
+```
+主菜单:
+1. 特征提取流水线
+2. 视频检索演示
+3. 系统状态检查
+4. 运行完整演示 (提取+检索)
+5. 退出
+```
+
+🎛️ 特征权重配置指南
+
+场景 传统权重 CLIP权重 适用情况
+视觉相似检索 0.8-0.9 0.1-0.2 颜色、纹理、形状相似性检索
+语义相似检索 0.1-0.2 0.8-0.9 内容概念、场景语义检索
+平衡检索 0.4-0.6 0.4-0.6 综合视觉和语义相似性
+强传统侧重 0.9 0.1 精确视觉匹配
+强语义侧重 0.1 0.9 高级概念匹配
+
+📊 输出示例
+
+```
+🔍 查询视频: example_video.mp4
+检索设置: top_k=5, 传统权重=0.50, CLIP权重=0.50
+
+📊 检索结果
+============================================================
+ 1. similar_video1.mp4
+     综合相似度: 0.9234 (传统: 0.8567, CLIP: 0.9901)
+ 2. similar_video2.mp4  
+     综合相似度: 0.8456 (传统: 0.9123, CLIP: 0.7789)
+ 3. similar_video3.mp4
+     综合相似度: 0.7890 (传统: 0.7456, CLIP: 0.8324)
+```
+
+🔧 技术细节
+
+传统特征组件
+
+· 颜色特征: HSV颜色空间直方图（150维）
+· 纹理特征: HOG方向梯度直方图（1764维）
+· 统计特征: 均值、标准差、中位数等（15维）
+
+CLIP特征
+
+· 模型: ViT-B/32
+· 特征维度: 512维
+· 预处理: 图像标准化和尺寸调整
+
+相似度计算
+
+· 算法: 余弦相似度
+· 归一化: L2向量归一化
+· 融合: 加权平均融合
+
+🐛 故障排除
+
+常见问题
+
+1. CLIP加载失败
+   ```bash
+   # 设置镜像源
+   set HF_ENDPOINT=https://hf-mirror.com
+   # 重新安装
+   pip install --upgrade open-clip-torch torch
+   ```
+2. 内存不足
+   · 减少同时处理的视频数量
+   · 降低视频采样率 (sample_rate参数)
+   · 使用CPU模式
+3. 特征文件不存在
+   · 确保先运行特征提取
+   · 检查文件路径权限
+4. 视频格式不支持
+   · 确保已安装正确的视频编解码器
+   · 尝试使用常见格式 (.mp4, .avi)
+
+调试工具
+
+```python
+# 检查系统状态
+python -c "from src.feature_extractor import VideoFeatureExtractor; from src.retrieval import VideoRetrievalSystem; print('系统正常')"
+
+# 测试CLIP
+python test_clip.py
+
+# 安装CLIP（网络问题）
+python install_clip_with_mirror.py
+```
+
+📝 文件说明
+
+· src/feature_extractor.py - 主特征提取器，支持传统+CLIP特征
+· src/clip_extractor.py - CLIP深度特征提取器
+· src/retrieval.py - 双特征检索系统
+· demo.py - 完整功能演示
+· main.py - 交互式主程序
+· test_clip.py - CLIP功能验证
+· install_clip_with_mirror.py - CLIP安装辅助工具
+
+🤝 贡献指南
+
+1. Fork 本项目
+2. 创建特性分支 (git checkout -b feature/AmazingFeature)
+3. 提交更改 (git commit -m 'Add some AmazingFeature')
+4. 推送到分支 (git push origin feature/AmazingFeature)
+5. 开启 Pull Request
+
+📄 许可证
+
+本项目采用 MIT 许可证
+
+🙏 致谢
+
+· OpenCLIP - 提供CLIP模型
+· OpenCV - 计算机视觉库
+
+---
+
+注意: 首次运行CLIP时会自动下载预训练模型（约1.4GB），请确保网络连接和足够的磁盘空间。如遇网络问题，系统会自动使用传统特征模式。
+
+```

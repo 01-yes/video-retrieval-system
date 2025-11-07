@@ -1,22 +1,125 @@
-# 虚拟环境
+# 6 files changed +389 -0 lines changed
+
+# Python虚拟环境
 venv/
+env/
+ENV/
+.venv/
 
 # 输出文件
 outputs/
+*.npy
+*.npz
+features/
+models/
 
 # 系统文件
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
 # Python缓存
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Jupyter notebook
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
 .ipynb_checkpoints
+*.ipynb
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# 临时文件
+*.log
+*.tmp
+*.temp
+
+# 数据文件
+*.avi
+*.mp4
+*.mov
+*.mkv
+data/
+dataset/
+
+# 模型文件（避免提交大文件）
+*.pth
+*.pt
+*.bin
+*.h5
+*.ckpt
+
+# CLIP缓存
+.cache/
+.huggingface/
+
+# 日志文件
+logs/
+*.log
+
+# 配置文件（如有敏感信息）
+config.json
+settings.ini
+*.key
+*.pem
+
+# 操作系统
+[Tt]humbs.db
