@@ -226,6 +226,7 @@ python install_clip_with_mirror.py
 
 · OpenCLIP - 提供CLIP模型
 · OpenCV - 计算机视觉库
+. DeepSeek - 代码支持
 
 ---
 
